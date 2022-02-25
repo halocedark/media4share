@@ -381,11 +381,11 @@ sendGetRequest = (url, CALLBACK) =>
 		{
 			if ( textStatus == 'error' )
 			{
-				deleteFile(APP_ROOT_PATH+'config.json', err =>
-				{
-					setupUserAuth();
+				//deleteFile(APP_ROOT_PATH+'config.json', err =>
+				//{
+				//	setupUserAuth();
 					DialogBox('Error', 'Error establishing connection to server!');
-				});
+				//});
 			}
 		}
 	});
@@ -409,11 +409,11 @@ sendPostRequest = (RequestObject, dataType = 'json') =>
 		{
 			if ( textStatus == 'error' )
 			{
-				deleteFile(APP_ROOT_PATH+'config.json', err =>
-				{
-					setupUserAuth();
+				//deleteFile(APP_ROOT_PATH+'config.json', err =>
+				//{
+				//	setupUserAuth();
 					DialogBox('Error', 'Error establishing connection to server!');
-				});
+				//});
 			}
 		}
 	});
@@ -441,11 +441,11 @@ sendAPIPostRequest = (url, data) =>
 		{
 			if ( textStatus == 'error' )
 			{
-				deleteFile(APP_ROOT_PATH+'config.json', err =>
-				{
-					setupUserAuth();
+				//deleteFile(APP_ROOT_PATH+'config.json', err =>
+				//{
+				//	setupUserAuth();
 					DialogBox('Error', 'Error establishing connection to server!');
-				});
+				//});
 			}
 		}
 	});
@@ -475,11 +475,11 @@ sendAPIFormDataRequest = (url, formData) =>
 		{
 			if ( textStatus == 'error' )
 			{
-				deleteFile(APP_ROOT_PATH+'config.json', err =>
-				{
-					setupUserAuth();
+				//deleteFile(APP_ROOT_PATH+'config.json', err =>
+				//{
+				//	setupUserAuth();
 					DialogBox('Error', 'Error establishing connection to server!');
-				});
+				//});
 			}
 		}
 	});

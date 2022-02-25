@@ -12,37 +12,37 @@ function setupAppUpdates()
 		transferred: 0,
 		total: 0
 	};
-	ipcIndexRenderer.on('checking-for-update', (info) =>
+	ipcIndexRenderer.on('checking-for-update', (e, info) =>
 	{
 		// Display loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
 		.find('#text').text(' Checking for updates...');
 		console.log(info);
 	});
-	ipcIndexRenderer.on('update-available', (info) =>
+	ipcIndexRenderer.on('update-available', (e, info) =>
 	{
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
 		//
-		options.version = info.version;
+		//options.version = info.version;
 		console.log(info);
 	});
-	ipcIndexRenderer.on('update-not-available', (info) =>
+	ipcIndexRenderer.on('update-not-available', (e, info) =>
 	{
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
 		console.log(info);
 	});
-	ipcIndexRenderer.on('update-error', (info) =>
+	ipcIndexRenderer.on('update-error', (e, info) =>
 	{
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
 		console.log(info);
 	});
-	ipcIndexRenderer.on('download-update-progress', (progressInfo) =>
+	ipcIndexRenderer.on('download-update-progress', (e, info) =>
 	{
 		// Display update dialog
 		//UpdateAppDialog(progressInfo);

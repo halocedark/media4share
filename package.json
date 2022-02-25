@@ -1,6 +1,6 @@
 {
   "name": "Media4Share",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Sharing files with others made easy",
   "main": "main.js",
   "scripts": {
