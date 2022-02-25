@@ -1,0 +1,24 @@
+<div class="rename-file-dialog-container overlay flex flex-center" id="renameFileDialogContainer" style="background-color: rgba(0, 0, 0, 0);">
+	<div class="wrapper overlay-content app-block block container" style="max-width: 450px;">
+		<div class="block-header">
+			<h3 class="block-title" style="font-size: 25px; font-weight: 100; text-shadow: 1px 1px 1px #808080;">
+				Change File Name
+			</h3>
+			<button class="btn-close block-btn-close" id="closeBTN"></button>
+		</div>
+		<div class="block-body">
+			<div class="block-group">
+				<label for="oldFileNameInput" class="block-label">File name:</label>
+				<input type="text" class="input-text input-text-outline" readonly id="oldFileNameInput">
+			</div>
+			<div class="block-group">
+				<label for="fileNameInput" class="block-label">Change to:</label>
+				<input type="text" class="input-text input-text-outline" id="fileNameInput" placeholder="Enter file name without extension EX: (.mp4, .rar, .wav.... etc)">
+				<div class="form-text">Don't use any special characters EX: (,/?:@.... etc) or extensions EX: (.mp4, .rar, .wav.... etc)</div>
+			</div>
+		</div>
+		<div class="block-footer">
+			<button class="d-block w-100 soft-shadow btn btn-primary btn-sm" id="renameBTN">Rename File</button>
+		</div>
+	</div>
+</div>

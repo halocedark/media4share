@@ -1,0 +1,91 @@
+<div class="settings-container" id="settingsContainer">
+	<div class="wrapper">
+		<div class="header">
+			<h3 class="title">My Settings Preferences</h3>
+		</div>
+		<div class="middle">
+			<div class="wrapper app-block">
+				<div class="accordion">
+					<div class="accordion-item" id="userAccountAccordion">
+						<h2 class="accordion-header" id="panelsStayOpenheadingOne">
+							<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpencollapseOne" aria-expanded="true" aria-controls="panelsStayOpencollapseOne">
+								Account settings
+							</button>
+						</h2>
+						<div id="panelsStayOpencollapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpenheadingOne">
+							<div class="accordion-body">
+								<form action="#" id="accountSettingsForm">
+									<div id="asfFormContents">
+										<!--
+										<div class="form-group mb-2">
+											<img src="assets/img/utils/user.png" style="max-width: 50px;" class="img-thumbnail border-circle" alt="">
+											<input type="file" class="input-text" id="asfImageFileInput">
+										</div>
+										<div class="form-group mb-2">
+											<label for="" class="form-label">Email:</label>
+											<input type="email" class="input-text input-text-outline" id="asfEmailInput" disabled>
+										</div>
+										<div class="form-group mb-2">
+											<label for="" class="form-label">Username:</label>
+											<input type="text" class="input-text input-text-outline" id="asfUsernameInput" disabled>
+										</div>
+										<div class="form-group mb-2">
+											<label for="asfFullnameInput" class="form-label">Fullname:</label>
+											<input type="text" class="input-text input-text-outline" id="asfFullnameInput">
+										</div>
+										<div class="form-group mb-2">
+											<label for="asfPasswordInput" class="form-label">Password:</label>
+											<input type="text" class="input-text input-text-outline" id="asfPasswordInput">
+										</div>
+										-->
+									</div>
+									<div class="form-group mb-2">
+										<input type="submit" class="btn btn-primary btn-sm" value="Update settings">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item" id="downloadsSettingsAccordion">
+						<h2 class="accordion-header" id="panelsStayOpenheadingTwo">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpencollapseTwo" aria-expanded="true" aria-controls="panelsStayOpencollapseTwo">
+								Downloads Settings
+							</button>
+						</h2>
+						<div id="panelsStayOpencollapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpenheadingTwo">
+							<div class="accordion-body">
+								<form action="#" id="downloadsSettingsForm">
+									<div class="form-group mb-2">
+										<label for="dsfDownloadsPathInput" class="form-label">Change downloads folder</label>
+										<input type="file" class="input-text my-1" id="dsfDownloadsPathFileInput">
+										<input type="text" class="input-text input-text-outline" id="dsfDownloadsPathInput" placeholder="Enter downloads path...">
+										<div class="form-text">Change where files will be placed after download finishes.</div>
+									</div>
+									<div class="form-group mb-2">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="dsfPlaySoundDownloadCompleteCheck">
+											<label class="form-check-label" for="dsfPlaySoundDownloadCompleteCheck">
+												Play sound when download complete
+											</label>
+										</div>
+									</div>
+									<div class="form-group mb-2">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="" id="dsfDisplayDownloadCompleteDialogCheck">
+											<label class="form-check-label" for="dsfDisplayDownloadCompleteDialogCheck">
+												Display download complete dialog
+											</label>
+										</div>
+									</div>
+									<div class="form-group mb-2">
+										<input type="submit" class="btn btn-primary btn-sm" value="Update settings">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>

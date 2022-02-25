@@ -1,0 +1,261 @@
+<div class="side-navbar-container container">
+	<div class="wrapper wrapper-p-1">
+		<div class="header">
+			<div class="avatar">
+				<img src="src/assets/img/utils/user.png" class="img-thumbnail" alt="">
+			</div>
+			<div class="details">
+				<h1 class="fullname">Test fullname</h1>
+				<p class="email">test@test.com</p>
+			</div>
+			<span class="notification fas fa-bell" id="notificationBTN"></span>
+		</div>
+		<div class="separator"></div>
+		<div class="middle">
+			<ul class="navmenu" id="sideNavBarMenu">
+				<li>
+					<a href="src/views/pages/statistics.ejs" class="active nm-link" data-role="NAV_LINK">
+						<span class="icon"><i class="fas fa-chart-bar"></i></span>
+						<span class="label">Statistics</span>
+					</a>
+				</li>
+				<li>
+					<a href="src/views/pages/files.ejs" class="nm-link" data-role="NAV_LINK">
+						<span class="icon"><i class="fas fa-folder"></i></span>
+						<span class="label">My Files</span>
+					</a>
+				</li>
+				<li>
+					<a href="src/views/pages/recent-files.ejs" class="nm-link" data-role="NAV_LINK">
+						<span class="icon"><i class="far fa-clock"></i></span>
+						<span class="label">Recent Files</span>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nm-link" data-role="NAV_LINK_DROP_DOWN_TOGGLER">
+						<span class="icon"><i class="fas fa-people-arrows"></i></span>
+						<span class="label">Shared With Me</span>
+					</a>
+					<div class="accordion accordion-flush dropdown-accordion" id="dropdownNavmenuAccordion">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="flush-heading-1">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-1" aria-expanded="false" aria-controls="flush-collapse-1">
+									Shared Directly
+								</button>
+							</h2>
+							<div id="flush-collapse-1" class="accordion-collapse collapse" aria-labelledby="flush-heading-1" data-bs-parent="#dropdownNavmenuAccordion">
+								<div class="accordion-body">
+									<a href="src/views/pages/shared-with-me.ejs" data-role="ACCORDION_NAV_LINK" class="accordion-link" target="_blank">Go to files</a>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="flush-heading-2">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-2" aria-expanded="false" aria-controls="flush-collapse-2">
+									Shared In Groups
+								</button>
+							</h2>
+							<div id="flush-collapse-2" class="accordion-collapse collapse" aria-labelledby="flush-heading-2" data-bs-parent="#dropdownNavmenuAccordion">
+								<div class="accordion-body">
+									<ul class="accordion-list" id="userJoinedGroupsList">
+										<!--
+										<li>
+											<a href="#" data-role="ACCORDION_SHARING_GROUP">Group name</a>
+										</li>
+										-->
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a href="src/views/pages/trashed-files.ejs" class="nm-link" data-role="NAV_LINK" id="trashedFilesNL">
+						<span class="icon"><i class="fas fa-trash"></i></span>
+						<span class="label">Trash (0)</span>
+					</a>
+				</li>
+				<li>
+					<a href="#" class="nm-link" data-role="NAV_LINK_DROP_DOWN_TOGGLER">
+						<span class="icon"><i class="fas fa-briefcase"></i></span>
+						<span class="label">My Stuff</span>
+					</a>
+					<div class="accordion accordion-flush dropdown-accordion" id="dropdownNavmenuAccordion">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="flush-heading-1">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-1" aria-expanded="false" aria-controls="flush-collapse-1">
+									Groups
+								</button>
+							</h2>
+							<div id="flush-collapse-1" class="accordion-collapse collapse" aria-labelledby="flush-heading-1" data-bs-parent="#dropdownNavmenuAccordion">
+								<div class="accordion-body">
+									<a href="src/views/pages/mygroups.ejs" data-role="ACCORDION_NAV_LINK" class="accordion-link" target="_blank">Go to my Groups</a>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="flush-heading-2">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-2" aria-expanded="false" aria-controls="flush-collapse-2">
+									Sharings
+								</button>
+							</h2>
+							<div id="flush-collapse-2" class="accordion-collapse collapse" aria-labelledby="flush-heading-2" data-bs-parent="#dropdownNavmenuAccordion">
+								<div class="accordion-body">
+									<a href="src/views/pages/my-direct-sharings.ejs" data-role="ACCORDION_NAV_LINK" class="accordion-link" target="_blank">Direct Shares</a>
+									<a href="src/views/pages/my-group-sharings.ejs" data-role="ACCORDION_NAV_LINK" class="accordion-link" target="_blank">Group Shares</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a href="src/views/pages/settings.ejs" class="nm-link" data-role="NAV_LINK">
+						<span class="icon"><i class="fas fa-user-cog"></i></span>
+						<span class="label">Settings</span>
+					</a>
+				</li>
+				<li>
+					<a href="" class="nm-link" data-role="NAV_LINK_LOGOUT">
+						<span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+						<span class="label">Logout</span>
+					</a>
+				</li>
+				<li>
+					<a href="" class="nm-link" data-role="NAV_LINK">
+						<span class="icon"><i class="far fa-question-circle"></i></span>
+						<span class="label">Help</span>
+					</a>
+				</li>
+				<li>
+					<div class="dropdown">
+						<a href="" class="nm-link" data-bs-toggle="dropdown" aria-expanded="false" id="moreInfoDropdown">
+							<span class="icon"><i class="fas fa-ellipsis-h"></i></span>
+							<span class="label">More</span>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="moreInfoDropdown">
+							<li><a class="dropdown-item" href="#">About</a></li>
+							<li><a class="dropdown-item" href="#">Terms of Service</a></li>
+							<li><a class="dropdown-item" href="#">Privacy Policy</a></li>
+							<li><a class="dropdown-item" href="#">Help</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="notification-container" id="notificationContainer">
+	<div class="wrapper wrapper-p-1 container" id="notificationsWrapper" style="max-width: 490px; max-height: 436px; overflow-x: hidden; overflow-y: auto;">
+		<!--
+		<div class="notification">
+			<p class="notification-desc">Domain mm2qr.com has been successfully registered.</p>
+			<p class="notification-date">2 months ago</p>
+		</div>
+		-->
+	</div>
+</div>
+<div class="top-navbar-container">
+	<div class="wrapper wrapper-p-1">
+		<div class="search-box" id="searchBox">
+			<div class="close-div">
+				<span class="btn-close" style="font-size: 12px; cursor: pointer;pointer-events: auto;" id="closeSearchBoxBTN" aria-label="Close"></span>
+			</div>
+			<input type="text" id="searchFilesInput" required class="input-text" placeholder="Keywords...">
+		</div>
+		<div class="row">
+			<div class="col-md">
+				<div class="logo">
+					<img src="src/assets/img/logo/logo.png" alt="">
+				</div>
+			</div>
+			<div class="col-md">
+				<ul class="navmenu">
+					<li>
+						<a href="#" class="nm-link" title="Create folder..." id="createFolderBTN">
+							<span class="icon"><i class="fas fa-folder-plus"></i></span>
+							<span class="label">Create Folder</span>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="nm-link" title="Empty trash" id="emptyTrashBTN">
+							<span class="icon"><i class="fas fa-broom"></i></span>
+							<span class="label">Empty Trash</span>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="nm-link" title="Upload file" id="uploadBTN">
+							<span class="icon"><i class="fas fa-cloud-upload-alt"></i></span>
+							<span class="label">Upload</span>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="nm-link" title="Search for files" id="searchBTN">
+							<span class="icon"><i class="fas fa-search"></i></span>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="nm-link" title="Change view" id="changeViewBTN" data-view="GRID">
+							<span class="icon" style="pointer-events: none;"><i class="fas fa-th"></i></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="selected-files-wrapper">
+		<div class="wrapper wrapper-p-1 text-right">
+			<div class="row gx-3 gy-3">
+				<div class="col-md">
+					<ul class="list-unstyled navmenu" style="text-align: left;padding: .7em 0 0 0;">
+						<li>
+							<span class="text-muted" id="filesCount">0 files.</span>
+						</li>
+						<li>
+							<span class="text-muted" id="foldersCount">0 folders.</span>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md">
+					<ul class="list-unstyled navmenu" style="padding: 0;">
+						<li>
+							<a href="#" class="nm-link" title="" id="moveSelectedBTN" style="display: none;">
+								<span class="icon"><i class="fas fa-arrows-alt"></i></span>
+								<span class="label">Move</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="nm-link" title="" id="cutSelectedBTN">
+								<span class="icon"><i class="fas fa-cut"></i></span>
+								<span class="label">Cut Files</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="nm-link" title="" id="deleteSelectedBTN" style="display: none;">
+								<span class="icon"><i class="fas fa-trash"></i></span>
+								<span class="label">Delete</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="nm-link" title="" id="restoreSelectedFromTrashBTN">
+								<span class="icon"><i class="fas fa-recycle"></i></span>
+								<span class="label">Restore from Trash</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="nm-link" title="" id="moveSelectedToTrashBTN">
+								<span class="icon"><i class="fas fa-trash-alt"></i></span>
+								<span class="label">Move to Trash</span>
+							</a>
+						</li>
+						<li>
+							<a href="#" class="nm-link" title="Clear Selection..." id="clearSelectionBTN">
+								<span class="icon"><i class="far fa-times-circle"></i></span>
+								<span class="label"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

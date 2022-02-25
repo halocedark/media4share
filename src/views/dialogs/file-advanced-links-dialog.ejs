@@ -1,0 +1,46 @@
+<div class="file-advanced-links-dialog-container overlay flex flex-center" id="fileAdvancedLinksDialogContainer" style="background-color: rgba(0, 0, 0, 0);">
+	<div class="wrapper overlay-content app-block block container" style="max-width: 800px;">
+		<div class="block-header">
+			<h3 class="block-title" style="font-size: 25px; font-weight: 100; text-shadow: 1px 1px 1px #808080;">
+				Generate Advanced Links
+			</h3>
+			<button class="btn-close block-btn-close" id="closeBTN"></button>
+		</div>
+		<div class="block-body">
+			<div class="row gx-2 gy-3">
+				<div class="col-lg-6 col-md-6 col-sm-12">
+					<div class="file-info-div text-center">
+						<div class="fileicon" id="gadFileIcon">
+							<img src="" alt="">
+						</div>
+						<p class="filename" id="gadFilename"></p>
+						<p class="filesize" id="gadFileSize"></p>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-12">
+					<div class="form-group mb-4">
+						<label for="gadFileUrlInput" class="form-label">File URL</label>
+						<div class="input-group">
+							<span class="input-group-text copyText"><i class="fas fa-copy"></i></span>
+							<input type="text" class="input-text" id="gadFileUrlInput" readonly value="">
+						</div>
+					</div>
+					<div class="form-group mb-4">
+						<label for="gadFileFormSnippetInput" class="form-label">Forum Snippet</label>
+						<div class="input-group">
+							<span class="input-group-text copyText"><i class="fas fa-copy"></i></span>
+							<input type="text" class="input-text" id="gadFileFormSnippetInput" readonly value="">
+						</div>
+					</div>
+					<div class="form-group mb-4">
+						<label for="gadFileHTMLSnippetInput" class="form-label">HTML Snippet</label>
+						<div class="input-group">
+							<span class="input-group-text copyText"><i class="fas fa-copy"></i></span>
+							<textarea class="input-text" style="height: 211px;" id="gadFileHTMLSnippetInput" readonly></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
