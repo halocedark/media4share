@@ -17,6 +17,7 @@ function setupAppUpdates()
 		// Display loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
 		.find('#text').text(' Checking for updates...');
+		console.log(info);
 	});
 	ipcIndexRenderer.on('update-available', (info) =>
 	{
@@ -32,17 +33,20 @@ function setupAppUpdates()
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
+		console.log(info);
 	});
 	ipcIndexRenderer.on('update-error', (info) =>
 	{
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
+		console.log(info);
 	});
 	ipcIndexRenderer.on('download-update-progress', (progressInfo) =>
 	{
 		// Display update dialog
-		UpdateAppDialog(progressInfo);
+		//UpdateAppDialog(progressInfo);
+		console.log(info);
 	});
 }
 // Setup navbar
