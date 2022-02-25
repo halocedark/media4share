@@ -25,6 +25,7 @@ autoUpdater.on('update-not-available', (info) =>
 autoUpdater.on('update-downloaded', (info) =>
 {
 	console.log('Update downloaded...'+ info);
+	autoUpdater.quitAndInstall();
 });
 autoUpdater.on('error', (err) =>
 {

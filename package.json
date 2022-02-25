@@ -6,14 +6,21 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "build": "electron-builder build --win --publish never",
+    "deploy": "electron-builder build --win --publish always"
   },
   "repository": {
     "type" : "git",
     "url" : "https://github.com/halocedark/media4share-updates.git"
   },
-  "build": "electron-builder build --win --publish never",
-  "deploy": "electron-builder build --win --publish always",
+    "build": {
+    "appId": "com.holoolaz.media4share",
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/ico/favicon.ico"
+    }
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
