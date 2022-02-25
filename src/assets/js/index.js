@@ -1,6 +1,50 @@
 $(function()
 {
 
+// Setup app updates
+function setupAppUpdates()
+{
+	var options =
+	{
+		version: '',
+		percent: 0,
+		bytesPerSecond: 0,
+		transferred: 0,
+		total: 0
+	};
+	ipcIndexRenderer.on('checking-for-update', (info) =>
+	{
+		// Display loader
+		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
+		.find('#text').text(' Checking for updates...');
+	});
+	ipcIndexRenderer.on('update-available', (info) =>
+	{
+		// Hide loader
+		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
+		.find('#text').text('');
+		//
+		options.version = info.version;
+		console.log(info);
+	});
+	ipcIndexRenderer.on('update-not-available', (info) =>
+	{
+		// Hide loader
+		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
+		.find('#text').text('');
+	});
+	ipcIndexRenderer.on('update-error', (info) =>
+	{
+		// Hide loader
+		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
+		.find('#text').text('');
+	});
+	ipcIndexRenderer.on('download-update-progress', (progressInfo) =>
+	{
+		// Display update dialog
+		UpdateAppDialog(progressInfo);
+	});
+}
 // Setup navbar
 function setupNavbar()
 {
@@ -2199,6 +2243,8 @@ function AutoChecker()
 }
 
 // Call
+// Setup updates
+setupAppUpdates();
 
 // Setup default ini settings
 setupDefaultIniSettings();

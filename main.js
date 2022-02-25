@@ -9,29 +9,6 @@ let win;
 let loadingScreen;
 let devtools = null;
 
-// Setup auto updater
-autoUpdater.on('checking-for-update', () =>
-{
-	console.log('Checking for updates...');
-});
-autoUpdater.on('update-available', (info) =>
-{
-	console.log('Update available...'+ info);
-});
-autoUpdater.on('update-not-available', (info) =>
-{
-	console.log('Update not available...'+ info);
-});
-autoUpdater.on('update-downloaded', (info) =>
-{
-	console.log('Update downloaded...'+ info);
-	autoUpdater.quitAndInstall();
-});
-autoUpdater.on('error', (err) =>
-{
-	console.log('Update error...'+ err);
-});
-
 // Main Window
 function CreateWindow()
 {
@@ -94,13 +71,44 @@ function CreateLoadingScreen()
 
 	return loadingScreen;
 }
+// Setup auto updater
+function setupAutoUpdater()
+{
+	// Setup auto updater
+	autoUpdater.on('checking-for-update', () =>
+	{
+		console.log('Checking for updates...');
+		win.webContents.send('checking-for-update');
+	});
+	autoUpdater.on('update-available', (info) =>
+	{
+		win.webContents.send('update-available', info);
+	});
+	autoUpdater.on('update-not-available', (info) =>
+	{
+		console.log('Update not available...'+ info);
+	});
+	autoUpdater.on('update-downloaded', (info) =>
+	{
+		console.log('Update downloaded...'+ info);
+		win.webContents.send('update-downloaded', info);
+		//autoUpdater.quitAndInstall();
+	});
+	autoUpdater.on('download-progress', (progressInfo) =>
+	{
+		console.log('Update progress...'+ progressInfo);
+		win.webContents.send('download-update-progress', progressInfo);
+		//autoUpdater.quitAndInstall();
+	});
+	autoUpdater.on('error', (err) =>
+	{
+		console.log('Update error...'+ err);
+		win.webContents.send('update-error', err);
+	});
+}
 // Run CreateWindow func
 app.whenReady().then(() =>
 {
-	// Check for updates
-	if ( !isDev )
-		autoUpdater.checkForUpdates();
-
 	CreateLoadingScreen().show();
 	CreateWindow().webContents.on('dom-ready', () => // Also 'ready-to-show'
 	{
@@ -108,6 +116,11 @@ app.whenReady().then(() =>
 		{
 			loadingScreen.destroy();
 			win.show();
+			// Setup auto updater
+			setupAutoUpdater();
+			// Check for updates
+			if ( !isDev )
+				autoUpdater.checkForUpdates();
 		}, 5 * 1000 );
 	});
 });
@@ -131,5 +144,8 @@ ipcMain.on('show-select-dir-dialog', (e, arg) =>
 	{
 		e.sender.send('dialog-dir-selected', path);
 	});
-	
+});
+ipcMain.on('quit-and-install-update', (e, arg) =>
+{
+	autoUpdater.quitAndInstall();
 });

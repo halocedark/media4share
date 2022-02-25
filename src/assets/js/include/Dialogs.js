@@ -15,10 +15,49 @@ let RenameFolderDialog;
 let RenameFileDialog;
 let FileAdvancedLinksDialog;
 let FileSharingDialog;
+let UpdateAppDialog;
 
 $(function()
 {
 
+// Update app dialog
+UpdateAppDialog = (options) =>
+{
+	var updateAppDialogContainer = $('#updateAppDialogContainer');
+	var closeBTN = updateAppDialogContainer.find('closeBTN');
+	var updateVersion = updateAppDialogContainer.find('updateVersion');
+	var updatePercent = updateAppDialogContainer.find('updatePercent');
+	var updateBytesPerSecond = updateAppDialogContainer.find('updateBytesPerSecond');
+	var updateTransferred = updateAppDialogContainer.find('updateTransferred');
+	var updateTotal = updateAppDialogContainer.find('updateTotal');
+
+	// Display
+	show();
+	// Display update info
+	updateVersion.text('v'+options.version);
+	updatePercent.css('width', options.percent+'%').text(options.percent+'%');
+	updateBytesPerSecond.text( formatTransferBytes(options.bytesPerSecond) );
+	updateTransferred.text( formatBytesToStr(options.transferred) );
+	updateTotal.text( formatBytesToStr(options.total) );
+	// Close
+	closeBTN.off('click');
+	closeBTN.on('click', e =>
+	{
+		hide();
+	});
+
+	// Display dialog
+	function show()
+	{
+		if ( !updateAppDialogContainer.hasClass('active') )
+			updateAppDialogContainer.addClass('active');
+	}
+	// Hide dialog
+	function hide()
+	{
+		updateAppDialogContainer.removeClass('active');
+	}
+}
 // Folder context menu
 FolderContextMenu = (folderElement = null, visible = true) =>
 {

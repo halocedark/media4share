@@ -1819,7 +1819,7 @@ li::before {
 .top-navbar-container
 {
     margin-left: 250px;
-    background: #000000;
+    background: #282F3D;
 }
 .top-navbar-container .logo
 {
@@ -2926,6 +2926,76 @@ a
     font-size: 36px;
     line-height: 40px;
     text-transform: uppercase;
+}
+
+
+.update-app-dialog-container 
+{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 5000;
+    background: #F7F7F7;
+    color: #1B2C35;
+    width: 482px;
+    padding: 1em;
+    border-radius: 3px;
+    border: 1px solid #e6e6e6;
+    display: none;
+}
+.update-app-dialog-container.active
+{
+    display: block;
+}
+.update-app-dialog-container
+.small
+{
+    font-size: 13px;
+    color: #77a3bb;
+    font-weight: 200;
+}
+.update-app-dialog-container
+.medium
+{
+    font-size: 14px;
+    color: #366f8d;
+    font-weight: 200;
+}
+.update-app-dialog-container
+.uad-icon 
+{
+    display: block;
+    margin: 0 auto .5em auto;
+    width: 50px;
+    height: 50px;
+}
+.update-app-dialog-container
+.uad-title
+{
+    font-size: 17px;
+    font-weight: 200;
+    color: ;
+}
+.update-app-dialog-container
+.uad-version
+{
+    color: #111c22;
+    font-size: 15px;
+    font-weight: 100;
+}
+.update-app-dialog-container
+.uad-progress 
+{
+    height: 30px;
+    border-radius: 20px;
+    background: none;
+    margin: .5em;
+    border: 1px solid #e9e9e9;
+}
+.update-app-dialog-container
+.uad-progress .progress-bar
+{
+    background-color: #1B2C35;
 }
 
 
