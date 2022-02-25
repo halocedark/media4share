@@ -5,20 +5,24 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "build": "electron-builder build --win --publish never",
-    "deploy": "electron-builder build --win --publish always"
+    "publish": "electron-builder -p always"
   },
   "repository": {
     "type" : "git",
     "url" : "https://github.com/halocedark/media4share-updates.git"
   },
-    "build": {
+  "build": {
+    "publish": [{
+       "provider": "github",
+       "owner": "halocedark",
+       "repo": "media4share-updates"
+    }],
     "appId": "com.holoolaz.media4share",
     "win": {
-      "target": "nsis",
-      "icon": "src/assets/ico/favicon.ico"
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false
     }
   },
   "author": "",
