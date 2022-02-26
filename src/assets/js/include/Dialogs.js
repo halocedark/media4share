@@ -24,18 +24,18 @@ $(function()
 UpdateAppDialog = (options) =>
 {
 	var updateAppDialogContainer = $('#updateAppDialogContainer');
-	var closeBTN = updateAppDialogContainer.find('closeBTN');
-	var updateVersion = updateAppDialogContainer.find('updateVersion');
-	var updatePercent = updateAppDialogContainer.find('updatePercent');
-	var updateBytesPerSecond = updateAppDialogContainer.find('updateBytesPerSecond');
-	var updateTransferred = updateAppDialogContainer.find('updateTransferred');
-	var updateTotal = updateAppDialogContainer.find('updateTotal');
+	var closeBTN = updateAppDialogContainer.find('#closeBTN');
+	var updateVersion = updateAppDialogContainer.find('#updateVersion');
+	var updatePercent = updateAppDialogContainer.find('#updatePercent');
+	var updateBytesPerSecond = updateAppDialogContainer.find('#updateBytesPerSecond');
+	var updateTransferred = updateAppDialogContainer.find('#updateTransferred');
+	var updateTotal = updateAppDialogContainer.find('#updateTotal');
 
 	// Display
 	show();
 	// Display update info
 	updateVersion.text(options.version);
-	updatePercent.css('width', options.percent+'%').text(options.percent+'%');
+	updatePercent.css('width', options.percent.toFixed(2)+'%').text(options.percent.toFixed(2)+'%');
 	updateBytesPerSecond.text( formatTransferBytes(options.bytesPerSecond) );
 	updateTransferred.text( formatBytesToStr(options.transferred) );
 	updateTotal.text( formatBytesToStr(options.total) );

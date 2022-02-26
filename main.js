@@ -6,6 +6,7 @@ const {autoUpdater} = require('electron-updater');
 require("dotenv").config();
 const {PowerShell} = require('node-powershell');
 const axios = require('axios');
+var packageJson = require(__dirname+'/package.json');
 
 let win;
 let loadingScreen;
@@ -86,6 +87,8 @@ function setupAutoUpdater()
 		var token = response.data.accessToken;
 		// Set Env Variables
 		PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN",${token},"User")`;
+		// Set feed url
+		autoUpdater.setFeedURL({ provider: packageJson.build.publish.provider, owner: packageJson.build.publish.owner, repo: packageJson.build.publish.repo, token: token });
 		// Setup auto updater
 		autoUpdater.on('checking-for-update', () =>
 		{
