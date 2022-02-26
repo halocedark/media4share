@@ -26,8 +26,6 @@
     "nsis": {
       "oneClick": false
     },
-    "asar": true,
-    "afterPack": "./afterPack.js"
   },
   "author": "",
   "license": "MIT",
@@ -48,7 +46,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "asarmor": "^2.0.0",
     "electron": "^17.1.0",
     "electron-builder": "^22.14.13"
   }
