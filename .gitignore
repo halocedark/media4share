@@ -1,3 +1,6 @@
 electron-builder.yml
+.env
+config.json
+settings.ini
 node_modules
 dist

@@ -1,6 +1,7 @@
 $(function()
 {
 
+
 // Setup app updates
 function setupAppUpdates()
 {

@@ -12,6 +12,7 @@ const path = require('path');
 const uuid = require('uuid');
 const ipcIndexRenderer = require('electron').ipcRenderer;
 
+
 var MAIN_CONTENT_CONTAINER =  $('#MainContentContainer');
 var SIDE_NAV_CONTAINER = $('.side-navbar-container');
 var TOP_NAV_CONTAINER = $('.top-navbar-container');

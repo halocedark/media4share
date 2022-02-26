@@ -3,11 +3,15 @@ const ejse = require('ejs-electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const {autoUpdater} = require('electron-updater');
-
+require("dotenv").config();
+const {PowerShell} = require('node-powershell');
 
 let win;
 let loadingScreen;
 let devtools = null;
+
+// Set Env Variables
+PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN","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","User")`;
 
 // Main Window
 function CreateWindow()
