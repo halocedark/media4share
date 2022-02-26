@@ -88,7 +88,12 @@ function setupAutoUpdater()
 		// Set Env Variables
 		PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN",${token},"User")`;
 		// Set feed url
-		autoUpdater.setFeedURL({ provider: packageJson.build.publish.provider, owner: packageJson.build.publish.owner, repo: packageJson.build.publish.repo, token: token });
+		autoUpdater.setFeedURL({ 
+			provider: packageJson.build.publish.provider, 
+			owner: packageJson.build.publish.owner, 
+			repo: packageJson.build.publish.repo, 
+			token: token 
+		});
 		// Setup auto updater
 		autoUpdater.on('checking-for-update', () =>
 		{
