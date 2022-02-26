@@ -1,6 +1,6 @@
 {
   "name": "Media4Share",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sharing files with others made easy",
   "main": "main.js",
   "scripts": {
@@ -20,7 +20,8 @@
     "appId": "com.holoolaz.media4share",
     "win": {
       "target": "nsis",
-      "icon": "src/assets/ico/favicon.ico"
+      "icon": "src/assets/ico/favicon.ico",
+      "requestedExecutionLevel": "highestAvailable"
     },
     "nsis": {
       "oneClick": false
