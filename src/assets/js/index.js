@@ -19,7 +19,6 @@ function setupAppUpdates()
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
 		.find('#text').text(' Checking for updates...');
 		console.log(' Checking for updates...');
-		console.log(info);
 	});
 	ipcIndexRenderer.on('update-available', (e, info) =>
 	{
@@ -51,7 +50,8 @@ function setupAppUpdates()
 	ipcIndexRenderer.on('update-downloaded', (e, info) =>
 	{
 		console.log('update-downloaded');
-		PromptConfirmDialog('Confirm install updates', 'Updates downloaded, do you want to quit and install?').then(confirmed =>
+		PromptConfirmDialog('Confirm install updates', 'Updates downloaded, would you like to quit and install?')
+		.then(confirmed =>
 		{
 			ipcIndexRenderer.send('quit-and-install-update', info);
 		});

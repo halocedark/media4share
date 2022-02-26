@@ -80,7 +80,7 @@ function CreateLoadingScreen()
 function setupAutoUpdater()
 {
 	// Get access token
-	var remote_config = 'https://halocedark.github.io/devyard/json/media4share_update/remote_config.json';
+	var remote_config = 'https://holoola-z.com/projects/Media4Share/remote_config.json';
 	axios.get(remote_config).then(response =>
 	{
 		var token = response.data.accessToken;
