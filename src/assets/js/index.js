@@ -17,6 +17,7 @@ function setupAppUpdates()
 		// Display loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
 		.find('#text').text(' Checking for updates...');
+		console.log(' Checking for updates...');
 		console.log(info);
 	});
 	ipcIndexRenderer.on('update-available', (e, info) =>
