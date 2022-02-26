@@ -81,7 +81,6 @@ function setupAutoUpdater()
 	// Setup auto updater
 	autoUpdater.on('checking-for-update', () =>
 	{
-		console.log('Checking for updates...');
 		win.webContents.send('checking-for-update');
 	});
 	autoUpdater.on('update-available', (info) =>
@@ -90,23 +89,18 @@ function setupAutoUpdater()
 	});
 	autoUpdater.on('update-not-available', (info) =>
 	{
-		console.log('Update not available...'+ info);
+		win.webContents.send('update-not-available', info);
 	});
 	autoUpdater.on('update-downloaded', (info) =>
 	{
-		console.log('Update downloaded...'+ info);
 		win.webContents.send('update-downloaded', info);
-		//autoUpdater.quitAndInstall();
 	});
 	autoUpdater.on('download-progress', (progressInfo) =>
 	{
-		console.log('Update progress...'+ progressInfo);
 		win.webContents.send('download-update-progress', progressInfo);
-		//autoUpdater.quitAndInstall();
 	});
 	autoUpdater.on('error', (err) =>
 	{
-		console.log('Update error...'+ err);
 		win.webContents.send('update-error', err);
 	});
 }
