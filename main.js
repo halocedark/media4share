@@ -79,30 +79,41 @@ function CreateLoadingScreen()
 // Setup auto updater
 function setupAutoUpdater()
 {
-	// Setup auto updater
-	autoUpdater.on('checking-for-update', () =>
+	// Get access token
+	var remote_config = 'https://halocedark.github.io/devyard/json/media4share_update/remote_config.json';
+	axios.get(remote_config).then(response =>
 	{
-		win.webContents.send('checking-for-update');
-	});
-	autoUpdater.on('update-available', (info) =>
-	{
-		win.webContents.send('update-available', info);
-	});
-	autoUpdater.on('update-not-available', (info) =>
-	{
-		win.webContents.send('update-not-available', info);
-	});
-	autoUpdater.on('update-downloaded', (info) =>
-	{
-		win.webContents.send('update-downloaded', info);
-	});
-	autoUpdater.on('download-progress', (progressInfo) =>
-	{
-		win.webContents.send('download-update-progress', progressInfo);
-	});
-	autoUpdater.on('error', (err) =>
-	{
-		win.webContents.send('update-error', err);
+		var token = response.data.accessToken;
+		// Set Env Variables
+		PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN",${token},"User")`;
+		// Setup auto updater
+		autoUpdater.on('checking-for-update', () =>
+		{
+			win.webContents.send('checking-for-update');
+		});
+		autoUpdater.on('update-available', (info) =>
+		{
+			win.webContents.send('update-available', info);
+		});
+		autoUpdater.on('update-not-available', (info) =>
+		{
+			win.webContents.send('update-not-available', info);
+		});
+		autoUpdater.on('update-downloaded', (info) =>
+		{
+			win.webContents.send('update-downloaded', info);
+		});
+		autoUpdater.on('download-progress', (progressInfo) =>
+		{
+			win.webContents.send('download-update-progress', progressInfo);
+		});
+		autoUpdater.on('error', (err) =>
+		{
+			win.webContents.send('update-error', err);
+		});
+		// Check for updates
+		if ( !isDev )
+			autoUpdater.checkForUpdates();
 	});
 }
 // Run CreateWindow func
@@ -117,9 +128,6 @@ app.whenReady().then(() =>
 			win.show();
 			// Setup auto updater
 			setupAutoUpdater();
-			// Check for updates
-			if ( !isDev )
-				autoUpdater.checkForUpdates();
 		}, 5 * 1000 );
 	});
 });
