@@ -15,7 +15,9 @@
     "publish": {
        "provider": "github",
        "owner": "halocedark",
-       "repo": "media4share-updates"
+       "repo": "media4share-updates",
+       "host": "github.com",
+       "private": true
     },
     "appId": "com.holoolaz.media4share",
     "win": {

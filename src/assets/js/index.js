@@ -27,6 +27,7 @@ function setupAppUpdates()
 		.find('#text').text('');
 		//
 		//options.version = info.version;
+		console.log('update-available');
 		console.log(info);
 	});
 	ipcIndexRenderer.on('update-not-available', (e, info) =>
@@ -34,6 +35,7 @@ function setupAppUpdates()
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
+		console.log('update-not-available');
 		console.log(info);
 	});
 	ipcIndexRenderer.on('update-error', (e, info) =>
@@ -41,12 +43,14 @@ function setupAppUpdates()
 		// Hide loader
 		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
 		.find('#text').text('');
+		console.log('update-error');
 		console.log(info);
 	});
 	ipcIndexRenderer.on('download-update-progress', (e, info) =>
 	{
 		// Display update dialog
 		//UpdateAppDialog(progressInfo);
+		console.log('download-update-progress');
 		console.log(info);
 	});
 }
