@@ -34,9 +34,9 @@ UpdateAppDialog = (options) =>
 	// Display
 	show();
 	// Display update info
-	updateVersion.text(options.version);
+	updateVersion.text('v'+options.version);
 	updatePercent.css('width', options.percent.toFixed(2)+'%').text(options.percent.toFixed(2)+'%');
-	updateBytesPerSecond.text( formatTransferBytes(options.bytesPerSecond) );
+	//updateBytesPerSecond.text( formatTransferBytes(options.bytesPerSecond) );
 	updateTransferred.text( formatBytesToStr(options.transferred) );
 	updateTotal.text( formatBytesToStr(options.total) );
 	// Close

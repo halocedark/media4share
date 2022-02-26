@@ -3,13 +3,14 @@
 	<button class="btn-close" id="closeBTN"></button>
 	<div class="wrapper text-center">
 		<img src="src/assets/img/utils/loader4.gif" alt="" class="uad-icon">
-		<h1 class="uad-title">Updating...</h1>
+		<h1 class="uad-title">Downloading app updates...</h1>
 		<p class="uad-version" id="updateVersion"></p>
 		<div class="progress uad-progress">
 			<div class="progress-bar" id="updatePercent" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
 		</div>
 		<div class="uad-progress-info">
-			<span class="small" id="updateBytesPerSecond">0 KB/s</span>
+			<span class="small" style="display: none;" id="updateBytesPerSecond">0 KB/s</span>
+			<span class="medium">Downloaded </span>
 			<span class="small" id="updateTransferred">0 bytes</span>
 			<span class="medium"> of </span>
 			<span class="small" id="updateTotal">0 bytes</span>
