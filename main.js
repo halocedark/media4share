@@ -5,13 +5,14 @@ const isDev = require('electron-is-dev');
 const {autoUpdater} = require('electron-updater');
 require("dotenv").config();
 const {PowerShell} = require('node-powershell');
+const axios = require('axios');
 
 let win;
 let loadingScreen;
 let devtools = null;
 
 // Set Env Variables
-PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN","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","User")`;
+//PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN","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","User")`;
 
 // Main Window
 function CreateWindow()

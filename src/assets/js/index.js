@@ -30,6 +30,7 @@ function setupAppUpdates()
 		//options.version = info.version;
 		console.log('update-available');
 		console.log(info);
+		options.version = info.version;
 	});
 	ipcIndexRenderer.on('update-not-available', (e, info) =>
 	{
@@ -47,10 +48,22 @@ function setupAppUpdates()
 		console.log('update-error');
 		console.log(info);
 	});
+	ipcIndexRenderer.on('update-downloaded', (e, info) =>
+	{
+		console.log('update-downloaded');
+		PromptConfirmDialog('Confirm install updates', 'Updates downloaded, do you want to quit and install?').then(confirmed =>
+		{
+			ipcIndexRenderer.send('quit-and-install-update', info);
+		});
+	});
 	ipcIndexRenderer.on('download-update-progress', (e, info) =>
 	{
 		// Display update dialog
-		//UpdateAppDialog(progressInfo);
+		options.percent = info.percent;
+		options.total = info.total;
+		options.transferred = info.transferred;
+		options.bytesPerSecond = info.bytesPerSecond;
+		UpdateAppDialog(options);
 		console.log('download-update-progress');
 		console.log(info);
 	});
