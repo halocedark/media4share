@@ -81,12 +81,12 @@ function CreateLoadingScreen()
 function setupAutoUpdater()
 {
 	// Get access token
-	var remote_config = 'https://holoola-z.com/projects/Media4Share/remote_config.json';
-	axios.get(remote_config).then(response =>
-	{
-		var token = response.data.accessToken;
+	//var remote_config = 'https://holoola-z.com/projects/Media4Share/remote_config.json';
+	//axios.get(remote_config).then(response =>
+	//{
+		//var token = response.data.accessToken;
 		// Set Env Variables
-		PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN",${token},"User")`;
+		//PowerShell.$`[Environment]::SetEnvironmentVariable("GH_TOKEN",${token},"User")`;
 		/*
 		// Set feed url
 		autoUpdater.setFeedURL({ 
@@ -124,7 +124,7 @@ function setupAutoUpdater()
 		// Check for updates
 		if ( !isDev )
 			autoUpdater.checkForUpdates();
-	});
+	//});
 }
 // Run CreateWindow func
 app.whenReady().then(() =>
@@ -134,10 +134,13 @@ app.whenReady().then(() =>
 	{
 		setTimeout( () => 
 		{
-			loadingScreen.destroy();
-			win.show();
-			// Setup auto updater
-			setupAutoUpdater();
+			if ( loadingScreen )
+			{
+				loadingScreen.destroy();
+				win.show();
+				// Setup auto updater
+				setupAutoUpdater();
+			}
 		}, 5 * 1000 );
 	});
 });

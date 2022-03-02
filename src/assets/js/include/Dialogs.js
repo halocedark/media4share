@@ -16,10 +16,51 @@ let RenameFileDialog;
 let FileAdvancedLinksDialog;
 let FileSharingDialog;
 let UpdateAppDialog;
+let LatestUpdateChangesDialog;
 
 $(function()
 {
 
+// Latest update changes dialog
+LatestUpdateChangesDialog = (options) =>
+{
+	var latestUpdateChangesDialog = $('#latestUpdateChangesDialog');
+	var closeBTN = latestUpdateChangesDialog.find('#closeBTN');
+	var dialogTitle = latestUpdateChangesDialog.find('#dialogTitle');
+	var dialogVersion = latestUpdateChangesDialog.find('#dialogVersion');
+	var dialogBody = latestUpdateChangesDialog.find('#dialogBody');
+	var dialogCreatedAt = latestUpdateChangesDialog.find('#dialogCreatedAt');
+	var dialogPublishedAt = latestUpdateChangesDialog.find('#dialogPublishedAt');
+
+	// Display
+	show();
+	// Set title
+	dialogTitle.text(options.title);
+	// Set version
+	dialogVersion.text(options.version);
+	// Set Body
+	dialogBody.find('#body').html(options.body);
+	// Set created at
+	dialogCreatedAt.text(options.created_at);
+	// Set published at
+	dialogPublishedAt.text(options.published_at);
+	// Close
+	closeBTN.off('click');
+	closeBTN.on('click', e =>
+	{
+		hide();
+	});
+	// Display dialog
+	function show()
+	{
+		latestUpdateChangesDialog.addClass('active');
+	}
+	// Hide dialog
+	function hide()
+	{
+		latestUpdateChangesDialog.removeClass('active');
+	}
+}
 // Update app dialog
 UpdateAppDialog = (options) =>
 {
@@ -43,7 +84,7 @@ UpdateAppDialog = (options) =>
 	closeBTN.off('click');
 	closeBTN.on('click', e =>
 	{
-		hide();
+		forceHide();
 	});
 
 	// Display dialog
@@ -56,6 +97,11 @@ UpdateAppDialog = (options) =>
 	function hide()
 	{
 		updateAppDialogContainer.removeClass('active');
+	}
+	// Force Hide dialog
+	function forceHide()
+	{
+		updateAppDialogContainer.css('display', 'none');
 	}
 }
 // Folder context menu
@@ -74,9 +120,12 @@ FolderContextMenu = (folderElement = null, visible = true) =>
 	var moveFolderToTrashBTN = folderContextMenuContainer.find('[data-role="MOVE_FOLDER_TO_TRASH"]');
 	var deleteFolderForeverBTN = folderContextMenuContainer.find('[data-role="DELETE_FOLDER_FOREVER"]');
 	var renameFolderBTN = folderContextMenuContainer.find('[data-role="RENAME_FOLDER"]');
+	var downloadFolderBTN = folderContextMenuContainer.find('[data-role="DOWNLOAD_FOLDER_AS_ZIP"]');
+
 	var folderName = folderElement.data('realname');
 	var folderChangedName = folderElement.data('name');
 	var folder = folderElement.data('folder');
+	var folderPath = folderElement.data('folderpath');
 	// Set folder name title
 	filenameHeading.text(folderName);
 	// Set folder name
@@ -197,6 +246,57 @@ FolderContextMenu = (folderElement = null, visible = true) =>
 	{
 		e.preventDefault();
 		RenameFolderDialog(folderName);
+	});
+	// Download folder
+	downloadFolderBTN.off('click');
+	downloadFolderBTN.on('click', e =>
+	{
+		e.preventDefault();
+		// Display loader
+		TopNavLoader('Creating '+folderName+'.zip, Please wait...');
+		// Disable containers
+		setContainerDisabled(true);
+		archiveFolder(folderPath+'/').then(response =>
+		{
+			// Hide loader
+			TopNavLoader('', false);
+			// Enable containers
+			setContainerDisabled(false);
+			if ( response.code == 404 )
+			{
+				DialogBox('Error', response.message);
+				return;
+			}
+			var data = response.data;
+			// Get file info
+			// Display loader
+			TopNavLoader('Getting info for '+folderName+'.zip, Please wait...');
+			getFileInfoFromUrl(data.url).then(info =>
+			{
+				// Hide loader
+				TopNavLoader('', false);
+				// Create fake element
+				var id = 'FakeElement_'+uniqid();
+				var html = '<span style="display: none;" id="'+id+'"></span>';
+				MAIN_CONTENT_CONTAINER.append(html);
+				var fakeElement = MAIN_CONTENT_CONTAINER.find('#'+id);
+				fakeElement.data('filesize', info.total);
+				fakeElement.data('filelink', data.url);
+				fakeElement.data('filename', data.filename);
+				fakeElement.data('fullpath', data.fullpath);
+				fakeElement.data('download_type', 'FOLDER_DOWNLOAD');
+				// Add icon
+				fakeElement.append('<span class="icon"><img src="src/assets/img/file_types/zip.png" alt=""></span>');
+				// Start download
+				var fileDownloader = new FileDownloader(fakeElement);
+				fileDownloader.download().saveFile();
+
+				// Add request to queue
+				addDownloadRequest(fileDownloader.request());
+				// Remove fake element
+				fakeElement.remove();
+			});
+		});
 	});
 }
 // Create folder dialog

@@ -1,6 +1,9 @@
 $(function()
 {
+	
 
+// Clear loader on page complete load
+$('#loadingScreen').remove();
 // Setup app updates
 function setupAppUpdates()
 {
@@ -15,31 +18,31 @@ function setupAppUpdates()
 	ipcIndexRenderer.on('checking-for-update', (e, info) =>
 	{
 		// Display loader
-		TOP_NAV_CONTAINER.find('#loader').css('display', 'block')
-		.find('#text').text(' Checking for updates...');
+		TopNavLoader('Checking for updates...');
 	});
 	ipcIndexRenderer.on('update-available', (e, info) =>
 	{
 		// Hide loader
-		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
-		.find('#text').text('');
+		TopNavLoader('', false);
 		options.version = info.version;
 	});
 	ipcIndexRenderer.on('update-not-available', (e, info) =>
 	{
 		// Hide loader
-		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
-		.find('#text').text('');
+		TopNavLoader('', false);
 	});
 	ipcIndexRenderer.on('update-error', (e, info) =>
 	{
 		// Hide loader
-		TOP_NAV_CONTAINER.find('#loader').css('display', 'none')
-		.find('#text').text('');
+		TopNavLoader('', false);
 	});
 	ipcIndexRenderer.on('update-downloaded', (e, info) =>
 	{
-		console.log('update-downloaded');
+		// Save update info
+		getLatestUpdateRelease().then(response =>
+		{
+			saveLatestUpdateReleaseInfo(response);
+		});
 		PromptConfirmDialog('Confirm install updates', 'Updates downloaded, would you like to quit and install?')
 		.then(confirmed =>
 		{
@@ -68,6 +71,7 @@ function setupNavbar()
 	var detailsDiv = SIDE_NAV_CONTAINER.find('.details');
 	var sideNavBarMenu = SIDE_NAV_CONTAINER.find('.middle #sideNavBarMenu');
 	var notificationBTN = SIDE_NAV_CONTAINER.find('.header #notificationBTN');
+	var moreInfoDropdownDiv = SIDE_NAV_CONTAINER.find('.middle #moreInfoDropdownDiv');
 
 	var searchBTN = TOP_NAV_CONTAINER.find('.navmenu #searchBTN');
 	var searchBox = TOP_NAV_CONTAINER.find('#searchBox');
@@ -93,16 +97,39 @@ function setupNavbar()
 	avatarDiv.find('img').attr('src', avatar);
 	detailsDiv.find('.fullname').text( getUserConfig().fullName );
 	detailsDiv.find('.email').text( getUserConfig().userEmail );
+	// Display viewer tag
+	if ( getUserConfig().HIGH_AUTHORITY != null )
+	{
+		detailsDiv.find('.adminTag').text( 'Viewed by: '+getUserConfig().HIGH_AUTHORITY.userName );
+	}
+	else
+	{
+		detailsDiv.find('.adminTag').text('');
+	}
+	// Check if admin then display admin panel button
+	if ( getUserConfig().role.canAccessAdminPanel
+		|| getUserConfig().HIGH_AUTHORITY != null )
+	{
+		sideNavBarMenu.find('[data-role="ADMIN_PANEL_NAV_LINK"]')
+		.css('display', 'block');
+	}
+	else
+	{
+		sideNavBarMenu.find('[data-role="ADMIN_PANEL_NAV_LINK"]')
+		.css('display', 'none');
+	}
 
-	// Change page
+	// 
+
+	// Click navmenu
 	sideNavBarMenu.off('click');
 	sideNavBarMenu.on('click', e =>
 	{
-		e.preventDefault();
 		var target = $(e.target);
 		
 		if ( target.data('role') == 'NAV_LINK' )
 		{
+			e.preventDefault();
 			var href = target.attr('href');
 
 			var page = APP_DIR_NAME+href;
@@ -122,6 +149,7 @@ function setupNavbar()
 		}
 		else if ( target.data('role') == 'NAV_LINK_DROP_DOWN_TOGGLER' )
 		{
+			e.preventDefault();
 			sideNavBarMenu.find('li .dropdown-accordion').slideUp(50);
 			target.siblings('.dropdown-accordion').slideDown(200)
 			.parent().find('li .dropdown-accordion').slideUp(50);
@@ -131,6 +159,7 @@ function setupNavbar()
 		}
 		else if ( target.data('role') == 'ACCORDION_NAV_LINK' )
 		{
+			e.preventDefault();
 			var href = target.attr('href');
 
 			var page = APP_DIR_NAME+href;
@@ -146,6 +175,7 @@ function setupNavbar()
 		}
 		else if ( target.data('role') == 'ACCORDION_SHARING_GROUP' )
 		{
+			e.preventDefault();
 			var groupId = target.data('groupid');
 			var href = target.attr('href');
 
@@ -160,8 +190,66 @@ function setupNavbar()
 				setupFilesSharedWithMeInGroup(groupId);
 			});
 		}
+		else if ( target.data('role') == 'ADMIN_PANEL_NAV_LINK' )
+		{
+			e.preventDefault();
+			PromptConfirmDialog('Confirm panel switch', 'Are you sure? This will abort any progressing operation Like (file downloads, uploads...)').then(confirmed =>
+			{
+				var href = target.attr('href');
+				// Check if there is admin key in user object
+				var userConfig = getUserConfig();
+				if ( userConfig.HIGH_AUTHORITY != null )
+				{
+					// Save only admin key object
+					saveUserConfig(userConfig.HIGH_AUTHORITY, (err) =>
+					{
+						if ( err )
+						{
+							DialogBox('Error', 'Could not save config file!');
+							console.log(err);
+							return;
+						}
+						// Got to admin cpanel
+						console.log(APP_DIR_NAME+href);
+						window.location.href = APP_DIR_NAME+href;
+					});
+				}
+				else
+				{
+					window.location.href = APP_DIR_NAME+href;
+				}
+			});	
+		}
+		else if ( target.data('role') == 'NAV_LINK_RELEASE_NOTES' )
+		{
+			e.preventDefault();
+			var releaseNotes = loadLatestUpdateReleaseInfo();
+			if ( releaseNotes )
+			{
+				var options = {
+					title: APP_NAME+' Release notes',
+					body: '<pre class="pre">'+releaseNotes.body+'</pre>',
+					version: releaseNotes.tag_name,
+					created_at: 'Created at: '+releaseNotes.created_at,
+					published_at: 'Published at: '+releaseNotes.published_at
+				};
+				LatestUpdateChangesDialog(options);
+			}
+			else
+			{
+				var options = {
+					title: APP_NAME+' Release notes',
+					body: 'No releases found.',
+					version: '',
+					created_at: '',
+					published_at: ''
+				};
+				LatestUpdateChangesDialog(options);
+			}
+		}
 		else if ( target.data('role') == 'NAV_LINK_LOGOUT' )
 		{
+			e.preventDefault();
 			PromptConfirmDialog('Confirm Logout', 'Are you sure?').then(confirmed =>
 			{
 				deleteFile(APP_ROOT_PATH+'config.json', err =>
@@ -470,6 +558,7 @@ setupUserAuth = () =>
 		});
 	});
 	// Load server hostname
+	loadServerHostname();
 	function loadServerHostname()
 	{
 		var settings = loadIniSettingsSync();
@@ -513,10 +602,17 @@ setupUserAuth = () =>
 				{
 					// Hide container
 					userAuthContainer.hide(50);
-					// Show other containers
-					MAIN_CONTENT_CONTAINER.show(50);
-					// Rebind events
-					rebindEvents();
+					// First UI user will see
+					getPage(APP_DIR_NAME+'src/views/pages/statistics.ejs').then(response =>
+					{
+						MAIN_CONTENT_CONTAINER.css('display', 'block');
+						MAIN_CONTENT_CONTAINER.html(response);
+						// Re assign events
+						rebindEvents();
+						// Check can access admin panel
+						if ( getUserConfig().role.canAccessAdminPanel )
+							window.location.href = 'src/admin/index.ejs';
+					});
 				});
 				// Reset form
 				target[0].reset();
@@ -853,7 +949,7 @@ function setupMyFiles()
 				}
 				
 				html += `<div class="">
-							<div class="folder list-view" data-role="FOLDER" data-folder="MY_FILES" data-realname="${ v.name }" data-name="${ v.name }" data-foldername="${ parentsPath }${ v.name }/" folderpath="${ v.fullpath }">
+							<div class="folder list-view" data-role="FOLDER" data-folder="MY_FILES" data-realname="${ v.name }" data-name="${ v.name }" data-foldername="${ parentsPath }${ v.name }/" data-folderpath="${ v.fullpath }">
 								<span class="icon"><i class="fas fa-folder"></i></span>
 								<span class="name">${ v.name }</span>
 								<div class="folder-info">
@@ -1229,7 +1325,6 @@ function setupFilesSharedWithMeInGroup(groupId)
 		PageLoader();
 		sendAPIPostRequest(url, data).then(response =>
 		{
-			console.log(response);
 			// Hide loader
 			PageLoader(false);
 			// Clear html
@@ -1340,7 +1435,7 @@ function setupTrashedFiles()
 					parentsPath = v.parents.path;
 				}
 				html += `<div class="">
-							<div class="folder list-view" data-role="FOLDER" data-folder="TRASH" data-realname="${ v.realname }" data-name="${ v.name }" data-foldername="${ parentsPath }${ v.name }/" folderpath="${ v.fullpath }">
+							<div class="folder list-view" data-role="FOLDER" data-folder="TRASH" data-realname="${ v.realname }" data-name="${ v.name }" data-foldername="${ parentsPath }${ v.name }/" data-folderpath="${ v.fullpath }">
 								<span class="icon"><i class="fas fa-folder"></i></span>
 								<span class="name">${ v.realname }</span>
 								<div class="folder-info">
@@ -1425,7 +1520,12 @@ function setupSettings()
 	accountSettingsForm.on('submit', e =>
 	{
 		e.preventDefault();
-		var target = accountSettingsForm;
+		var target = $(e.target);
+		if ( $.trim(target.find('#asfPasswordInput').val()) != $.trim(target.find('#asfConfirmPasswordInput').val()) )
+		{
+			DialogBox('Error', 'Passwords do not match!');
+			return;
+		}
 		var fd = new FormData();
 
 		if ( target.find('#asfImageFileInput')[0].files.length > 0 )
@@ -1434,6 +1534,8 @@ function setupSettings()
 		fd.append('userId', getUserConfig().userId);
 		fd.append('fullname', target.find('#asfFullnameInput').val() );
 		fd.append('password', target.find('#asfPasswordInput').val() );
+		fd.append('username', target.find('#asfUsernameInput').val() );
+		fd.append('email', target.find('#asfEmailInput').val() );
 		var url = API_END_POINT+'users/update';
 		// Display loader
 		PageLoader();
@@ -1508,18 +1610,18 @@ function setupSettings()
 
 			var data = response.data;
 			var userAvatar = (data.userAvatar == null || data.userAvatar == 'null' 
-								|| data.userAvatar == '') ? 'src/assets/img/utils/user.png' : data.userAvatar;
+								|| data.userAvatar == '') ? 'assets/img/utils/user.png' : data.userAvatar;
 			var html = `<div class="form-group mb-2">
 							<img src="${userAvatar}" style="width: 100px;height: 100px; border-radius: 50%;" class="img-thumbnail" alt="">
 							<input type="file" class="input-text mt-3" id="asfImageFileInput">
 						</div>
 						<div class="form-group mb-2">
 							<label for="" class="form-label">Email:</label>
-							<input type="email" class="input-text input-text-outline" id="asfEmailInput" disabled value="${data.userEmail}">
+							<input type="email" class="input-text input-text-outline" id="asfEmailInput" value="${data.userEmail}">
 						</div>
 						<div class="form-group mb-2">
 							<label for="" class="form-label">Username:</label>
-							<input type="text" class="input-text input-text-outline" id="asfUsernameInput" disabled value="${data.userName}">
+							<input type="text" class="input-text input-text-outline" id="asfUsernameInput" value="${data.userName}">
 						</div>
 						<div class="form-group mb-2">
 							<label for="asfFullnameInput" class="form-label">Fullname:</label>
@@ -1528,6 +1630,10 @@ function setupSettings()
 						<div class="form-group mb-2">
 							<label for="asfPasswordInput" class="form-label">Password:</label>
 							<input type="password" class="input-text input-text-outline" required id="asfPasswordInput">
+						</div>
+						<div class="form-group mb-2">
+							<label for="asfConfirmPasswordInput" class="form-label">Confirm Password:</label>
+							<input type="password" class="input-text input-text-outline" required id="asfConfirmPasswordInput">
 						</div>`;
 
 			// Add html 
@@ -1887,269 +1993,6 @@ function setupMyStuff()
 		return selectedList;
 	}
 }
-// Setup youtube downloader
-function setupYoutubeDownloader()
-{
-	var youtubeDownloaderContainer = $('#youtubeDownloaderContainer');
-	if ( youtubeDownloaderContainer[0] == undefined )
-		return;
-
-	var TABS_LINKS = youtubeDownloaderContainer.find('#TABS_LINKS');
-	var VIDEO_FORMATS_TABS_LINKS = youtubeDownloaderContainer.find('#VIDEO_FORMATS_TABS_LINKS');
-
-	var VF_VIDEO_TAB = youtubeDownloaderContainer.find('#VF_VIDEO_TAB');
-	var VF_AUDIO_TAB = youtubeDownloaderContainer.find('#VF_AUDIO_TAB');
-
-	var SINGLE_VIDEO_TAB = youtubeDownloaderContainer.find('#SINGLE_VIDEO_TAB');
-	var SINGLE_VIDEO_TAB_FORM = SINGLE_VIDEO_TAB.find('#SINGLE_VIDEO_TAB_FORM');
-	var SVTF_VIDEO_URL_INPUT = SINGLE_VIDEO_TAB_FORM.find('#SVTF_VIDEO_URL_INPUT');
-	var SVTF_LOADER = SINGLE_VIDEO_TAB_FORM.find('#SVTF_LOADER');
-
-	var VIDEO_THUMNBAIL = youtubeDownloaderContainer.find('#VIDEO_THUMNBAIL');
-	var VIDEO_TITLE = youtubeDownloaderContainer.find('#VIDEO_TITLE');
-
-	var VIDEO_ID = undefined;
-
-	// Switch download tabs
-	TABS_LINKS.off('click');
-	TABS_LINKS.on('click', e =>
-	{
-		var target = $(e.target);
-		var targetTab = $(target.data('tab'));
-
-		if ( targetTab[0] == undefined )
-			return;
-
-		targetTab.addClass('active').siblings().removeClass('active');
-		target.addClass('active').siblings().removeClass('active');
-	});
-	// Switch video formats tabs
-	VIDEO_FORMATS_TABS_LINKS.off('click');
-	VIDEO_FORMATS_TABS_LINKS.on('click', e =>
-	{
-		var target = $(e.target);
-		var targetTab = $(target.data('tab'));
-
-		if ( targetTab[0] == undefined )
-			return;
-
-		targetTab.addClass('active').siblings().removeClass('active');
-		target.addClass('active').siblings().removeClass('active');
-	});
-	// On video url input
-	SVTF_VIDEO_URL_INPUT.off('input');
-	SVTF_VIDEO_URL_INPUT.on('input', e =>
-	{
-		var url = SVTF_VIDEO_URL_INPUT.val();
-		// Display video info
-		displayVideoInfo(url);
-	});
-	// On form submit
-	SINGLE_VIDEO_TAB_FORM.off('submit');
-	SINGLE_VIDEO_TAB_FORM.on('submit', e =>
-	{
-		e.preventDefault();
-		var url = SVTF_VIDEO_URL_INPUT.val();
-		// Display video info
-		displayVideoInfo(url);
-	});
-	// Download Video
-	VF_VIDEO_TAB.off('click');
-	VF_VIDEO_TAB.on('click', e =>
-	{
-		var target = $(e.target);
-		if ( target.data('role') == 'VF_VIDEO_DOWNLOAD_BTN' )
-		{
-			var url = target.data('url');
-			var fileElement = target.closest('.tr');
-			var fileSize = 0;
-			// Set file size
-			getFileInfoFromUrl(url).then(info =>
-			{
-				fileElement.data('filesize', info.total);
-				// Start download
-				var fileDownloader = new FileDownloader(fileElement);
-				fileDownloader.download().saveFile();
-				// Add request to queue
-				addDownloadRequest(fileDownloader.request());
-			});
-		}
-	});
-	// Download Audio
-	VF_AUDIO_TAB.off('click');
-	VF_AUDIO_TAB.on('click', e =>
-	{
-		var target = $(e.target);
-		if ( target.data('role') == 'VF_AUDIO_DOWNLOAD_BTN' )
-		{
-			var url = target.data('url');
-			console.log(url);
-		}
-	});
-	// Display video info
-	function displayVideoInfo(url)
-	{
-		// Check if valid youtube url
-		if ( !ytdl.validateURL(url) )
-		{
-			DialogBox('Error', 'Not a valid youtube video url.');
-			// Clear text
-			SVTF_VIDEO_URL_INPUT.val('');
-			return;
-		}
-		// Get video id
-		try
-		{
-			var id = ytdl.getURLVideoID(url);
-			setVideoId(id);
-		}
-		catch(error)
-		{
-			DialogBox('Error', error);
-			return;
-		}
-		// Check video id
-		if ( !ytdl.validateID(getVideoId()) )
-		{
-			DialogBox('Error', 'Not a valid youtube video url.');
-			// Clear text
-			SVTF_VIDEO_URL_INPUT.val('');
-			return;
-		}
-		// Get video info
-		// Display loader
-		SVTF_LOADER.css('display', 'block');
-		getVideoInfo().then(info =>
-		{
-			// Hide loader
-			SVTF_LOADER.css('display', 'none');
-			// Display thumbnail
-			VIDEO_THUMNBAIL.attr('src', info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 1].url );
-			// Display title
-			VIDEO_TITLE.text(info.videoDetails.title);
-			var formats = info.formats;
-			var html = '';
-			// Loop Videos
-			// Clear html
-			VF_VIDEO_TAB.find('.tbody').html('');
-			$.each(formats, (k,v) =>
-			{
-				if ( v.hasVideo && v.hasAudio )
-				{
-					var qualityLabel = '';
-					var contentLength = (v.contentLength != null) ? formatBytesToStr(v.contentLength) : 'N/A';
-					if ( v.qualityLabel == '720p' )
-					{
-						qualityLabel = `<span class="text">${v.qualityLabel} (.${v.container})</span>
-										<span class="tag">${v.quality}</span>`;
-					}
-					else if ( v.qualityLabel == '1080p' )
-					{
-						qualityLabel = `<span class="text">${v.qualityLabel} (.${v.container})</span>
-										<span class="tag">${v.quality}</span>`;
-					}
-					else
-					{
-						qualityLabel = `<span class="text">${v.qualityLabel} (.${v.container})</span>`;
-					}
-					html += `<div class="tr" data-filesize="${v.contentLength}" data-filelink="${v.url}" data-filename="${info.videoDetails.title}.${v.container}">
-								<span class="icon" style="display: none;">
-									<img src="${info.videoDetails.thumbnails[info.videoDetails.thumbnails.length - 1].url}" alt="">
-								</span>
-								<li class="td">
-									<a href="#">
-										${qualityLabel}
-									</a>
-								</li>
-								<li class="td">
-									<span class="text">${ contentLength }</span>
-								</li>
-								<li class="td">
-									<button class="btn btn-success btn-sm" data-role="VF_VIDEO_DOWNLOAD_BTN" data-url="${v.url}">
-										Download
-									</button>
-								</li>
-							</div>`;					
-				}
-			});
-			// Add Videos html
-			VF_VIDEO_TAB.find('.tbody').html(html);
-			// Loop Audios
-			// Clear html
-			VF_AUDIO_TAB.find('.tbody').html('');
-			html = '';
-			$.each(formats, (k,v) =>
-			{
-				if ( !v.hasVideo && v.hasAudio )
-				{
-					var audioSampleRate = (v.audioSampleRate != null) ? '.'+v.container+' ('+formatSampleRate(v.audioSampleRate)+')' : 'N/A';
-					var contentLength = (v.contentLength != null) ? formatBytesToStr(v.contentLength) : 'N/A';
-					html += `<div class="tr">
-								<li class="td">
-									<a href="#">
-										${audioSampleRate}
-									</a>
-								</li>
-								<li class="td">
-									<span class="text">${ contentLength }</span>
-								</li>
-								<li class="td">
-									<button class="btn btn-success btn-sm" data-role="VF_AUDIO_DOWNLOAD_BTN" data-url="${v.url}">
-										Download
-									</button>
-								</li>
-							</div>`;					
-				}
-			});
-			// Add Audios html
-			VF_AUDIO_TAB.find('.tbody').html(html);
-		}, error =>
-		{
-			// Hide loader
-			SVTF_LOADER.css('display', 'none');
-			// Clear html
-			VF_VIDEO_TAB.find('.tbody').html('');
-			VF_AUDIO_TAB.find('.tbody').html('');
-		});
-	}
-	// Get Both formats
-	async function getBothFormats()
-	{
-		let info = await ytdl.getInfo(getVideoId());
-		let audioFormats = ytdl.filterFormats(info.formats, 'audioandvideo');
-		return audioFormats;
-	}
-	// Get Audio formats
-	async function getAudioFormats()
-	{
-		let info = await ytdl.getInfo(getVideoId());
-		let audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
-		return audioFormats;
-	}
-	// Get Video formats
-	async function getVideoFormats()
-	{
-		let info = await ytdl.getInfo(getVideoId());
-		let audioFormats = ytdl.filterFormats(info.formats, 'videoonly');
-		return audioFormats;
-	}
-	// Get video info
-	async function getVideoInfo()
-	{
-		let info = await ytdl.getInfo(getVideoId());
-		return info;
-	}
-	// Set video id
-	function setVideoId(id)
-	{
-		VIDEO_ID = id;
-	}
-	// Get video Id
-	function getVideoId()
-	{
-		return VIDEO_ID;
-	}
-}
 // Re-assign events
 rebindEvents = () =>
 {
@@ -2162,7 +2005,6 @@ rebindEvents = () =>
 	setupTrashedFiles();
 	setupSettings();
 	setupMyStuff();
-	setupYoutubeDownloader();
 	// Init animations
 	initAnimations();
 	// Get groups I'm joined
@@ -2276,7 +2118,6 @@ getPage(APP_DIR_NAME+'src/views/pages/statistics.ejs').then(response =>
 	// Re assign events
 	rebindEvents();
 });
-
 
 
 })

@@ -5,13 +5,17 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "publish": "electron-builder -p always"
+    "publish": "electron-builder -p always",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/halocedark/media4share-updates.git"
   },
   "build": {
+    "asar": true,
+    "afterPack": "afterPack.js",
     "publish": {
       "provider": "github",
       "owner": "halocedark",

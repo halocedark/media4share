@@ -129,6 +129,9 @@ FileDownloader = function(fileElement)
 	this.F_SAVE_PATH = SETTINGS.Download_Settings.DOWNLOADS_PATH;
 	this.F_SAVE_NAME = '';
 	var FELEMENT_ID = 'DOWNLOADING_FILE_'+uniqid();
+	var FDOWNLOAD_TYPE = (fileElement.data('download_type') != null) ? fileElement.data('download_type') : null;
+	var FID = (fileElement.data('fileid') != null) ? fileElement.data('fileid') : null;
+	var FFULL_PATH = (fileElement.data('fullpath') != null) ? fileElement.data('fullpath') : null;
 	var FSIZE = fileElement.data('filesize');
 	var FURL = fileElement.data('filelink');
 	var FNAME = fileElement.data('filename');
@@ -301,14 +304,33 @@ FileDownloader = function(fileElement)
 					{
 						playSound();
 					}
-					// Increment downloads count
-					if (  fileElement.data('fileid') != undefined )
+					// File download finish
+					if (  FID != undefined )
 					{
-						incrementFileDownloads(fileElement.data('fileid')).then(response =>
+						var options = {
+							fileId: FID,
+							fullpath: FFULL_PATH
+						};
+						fileDownloadFinish(options).then(response =>
 						{
 							if ( response.code == 404 )
 								return;
 						});
+					}
+					// Folder download finish
+					if ( FDOWNLOAD_TYPE != undefined )
+					{
+						if ( FDOWNLOAD_TYPE == 'FOLDER_DOWNLOAD' )
+						{
+							var options = {
+								fullpath: FFULL_PATH
+							};
+							folderDownloadFinish(options).then(response =>
+							{
+								if ( response.code == 404 )
+									return;
+							});
+						}
 					}
 		    	});
 		    };

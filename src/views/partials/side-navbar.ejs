@@ -7,6 +7,7 @@
 			<div class="details">
 				<h1 class="fullname">Test fullname</h1>
 				<p class="email">test@test.com</p>
+				<p class="small adminTag" style="color: #6d7a93"></p>
 			</div>
 			<span class="notification fas fa-bell" id="notificationBTN"></span>
 		</div>
@@ -121,22 +122,39 @@
 					</a>
 				</li>
 				<li>
+					<a href="src/admin/index.ejs" class="nm-link" style="display: none;" data-role="ADMIN_PANEL_NAV_LINK">
+						<span class="icon"><i class="fas fa-crown"></i></span>
+						<span class="label">Admin Panel</span>
+					</a>
+				</li>
+				<li>
 					<a href="" class="nm-link" data-role="NAV_LINK">
 						<span class="icon"><i class="far fa-question-circle"></i></span>
 						<span class="label">Help</span>
 					</a>
 				</li>
 				<li>
-					<div class="dropdown">
+					<div class="dropdown" id="moreInfoDropdownDiv">
 						<a href="" class="nm-link" data-bs-toggle="dropdown" aria-expanded="false" id="moreInfoDropdown">
 							<span class="icon"><i class="fas fa-ellipsis-h"></i></span>
 							<span class="label">More</span>
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="moreInfoDropdown">
-							<li><a class="dropdown-item" href="#">About</a></li>
-							<li><a class="dropdown-item" href="#">Terms of Service</a></li>
-							<li><a class="dropdown-item" href="#">Privacy Policy</a></li>
-							<li><a class="dropdown-item" href="#">Help</a></li>
+							<li>
+								<a class="dropdown-item" href="#" data-role="NAV_LINK_RELEASE_NOTES">Release Notes</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">About</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">Terms of Service</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">Privacy Policy</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">Help</a>
+							</li>
 						</ul>
 					</div>
 				</li>

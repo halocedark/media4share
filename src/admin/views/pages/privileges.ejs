@@ -1,0 +1,144 @@
+<div class="container-fluid" id="privilegesContainer">
+	<div class="wrapper">
+		<div class="header">
+			<h1 class="title-medium">Users Privileges</h1>
+		</div>
+		<div class="inner-wrapper app-block">
+			<p class="desc">You can add, remove or change certain privileges of existing roles.</p>
+			<div class="row gx-2 gy-3">
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="descriptive-block" id="rolesBlock">
+						<div class="db-header">
+							<h3 class="db-title">Select Roles</h3>
+							<p class="db-desc">Select a role to give it some permissions.</p>
+						</div>
+						<div class="db-body">
+							<ul class="db-list">
+								<!--
+								<li class="db-list-item">
+									<div class="row gx-2 gy-2">
+										<div class="col-lg-1 col-md-1">
+											<div class="db-flex-flex-center">
+												<input type="checkbox" class="form-check-input db-list-item-check" data-role="" data-permid="" data-permname="">
+											</div>
+										</div>
+										<div class="col-lg col-md">
+											<p class="db-list-item-widget-name-ui">
+												Perm to access admin control panel with (Full Control).
+											</p>
+											<p class="db-list-item-widget-desc-ui">
+												Anyone with this permission will allow him to access admin control panel with full control and full access.
+											</p>
+										</div>
+									</div>
+								</li>
+								-->
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="descriptive-block" id="permissionsBlock">
+						<div class="db-header">
+							<h3 class="db-title">Select Permissions</h3>
+							<p class="db-desc">Select one or more permissions for a role, these permissions are updated in realtime, and will be applied immediately.</p>
+						</div>
+						<div class="db-body">
+							<ul class="db-list">
+								<!--
+								<li class="db-list-item">
+									<div class="row gx-2 gy-2">
+										<div class="col-lg-1 col-md-1">
+											<div class="db-flex-flex-center">
+												<input type="checkbox" class="form-check-input db-list-item-check" data-role="" data-permid="" data-permname="">
+											</div>
+										</div>
+										<div class="col-lg col-md">
+											<p class="db-list-item-widget-name-ui">
+												Perm to access admin control panel with (Full Control).
+											</p>
+											<p class="db-list-item-widget-desc-ui">
+												Anyone with this permission will allow him to access admin control panel with full control and full access.
+											</p>
+										</div>
+									</div>
+								</li>
+								-->
+							</ul>
+						</div>
+						<div class="db-footer">
+							<p class="db-desc alert alert-info">Double click to assign permission to the selected role.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="descriptive-block" id="roleAssignedPermsBlock">
+						<div class="db-header">
+							<h3 class="db-title">Role Assigned Permissions</h3>
+							<p class="db-desc">These are the assigned permissions for the selected role.</p>
+						</div>
+						<div class="db-body">
+							<ul class="db-list">
+								<!--
+								<li class="db-list-item">
+									<div class="row gx-2 gy-2">
+										<div class="col-lg-1 col-md-1">
+											<div class="db-flex-flex-center">
+												<input type="checkbox" class="form-check-input db-list-item-check" data-role="" data-permid="" data-permname="">
+											</div>
+										</div>
+										<div class="col-lg col-md">
+											<p class="db-list-item-widget-name-ui">
+												Perm to access admin control panel with (Full Control).
+											</p>
+											<p class="db-list-item-widget-desc-ui">
+												Anyone with this permission will allow him to access admin control panel with full control and full access.
+											</p>
+										</div>
+									</div>
+								</li>
+								-->
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="inner-wrapper app-block" id="usersDiv">
+			<p class="desc">Upgrade users to a higher role.</p>
+			<div id="usersPaginationDiv" class="flex flex-center my-3"></div>
+			<div class="table-nav bg-repeat-x">
+				<div class="form-group mb-2">
+					<button class="btn btn-primary btn-sm" id="upgradeUserBTN">Set to Administrator</button>
+				</div>
+				<div class="form-group mb-2">
+					<input type="text" class="input-text input-text-outline" id="usersSearchInput" placeholder="Search using user info...">
+				</div>
+			</div>
+			<div class="table-div" style="margin-bottom: 5em;">
+				<ul class="utable shadowed" id="usersTable">
+					<div class="thead">
+						<li class="td" id="selectAllUsersBTN" style="pointer-events: auto; cursor: pointer;">Select All</li>
+						<li class="td">Fullname</li>
+						<li class="td">Username</li>
+						<li class="td">Email</li>
+						<li class="td">Role</li>
+					</div>
+					<div class="tbody">
+						<!--
+						<div class="tr" data-role="USER_ROW" data-userid="">
+							<li class="td">
+								<input type="checkbox" class="form-check-input" data-role="USER_CHECK" data-userid="">
+							</li>
+							<li class="td">name</li>
+							<li class="td">username</li>
+							<li class="td">email</li>
+							<li class="td">role</li>
+						</div>
+						-->
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

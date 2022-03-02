@@ -948,6 +948,15 @@ html, body
     background-image: url('../img/utils/cross-line2.png');
     background-repeat: repeat-x;
 }
+.pre{
+    overflow: hidden;
+    white-space: break-spaces;
+}
+.small
+{
+    font-size: 11px;
+    font-weight: 200;
+}
 .alert
 {
     font-weight: 200;
@@ -1421,6 +1430,7 @@ li::before {
 .block .block-body
 {
     padding: 1em;
+    font-weight: 200;
 }
 .block .block-footer
 {
@@ -1973,6 +1983,11 @@ li .nm-link .label
     outline: 0;
     -webkit-box-shadow: 0px 0px 3px 3px rgb(0 123 255 / 8%);
             box-shadow: 0px 0px 3px 3px rgb(0 123 255 / 8%);
+}
+div.disabled
+{
+    pointer-events: none;
+    opacity: .9;
 }
 
 
@@ -3001,5 +3016,21 @@ a
 
 
 
-
-
+.latest-update-changes-dialog
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #e6e6e6;
+    z-index: 4000;
+    display: none;
+}
+.latest-update-changes-dialog.active
+{
+    display: block;
+}

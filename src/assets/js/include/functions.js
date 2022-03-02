@@ -10,6 +10,7 @@ const app = express();
 const OS = require('os');
 const path = require('path');
 const uuid = require('uuid');
+var packageJson = require(__dirname+'/package.json');
 const ipcIndexRenderer = require('electron').ipcRenderer;
 
 
@@ -28,6 +29,8 @@ var APP_ROOT_PATH = ROOTPATH.rootPath+'/';
 var APP_DIR_NAME = __dirname+'/';
 
 const SETTINGS_FILE = 'settings';
+const LATEST_UPDATE_RELEASE_FILE = 'latest-update.json';
+const LATEST_UPDATE_RELEASE_PATH = OS.tmpdir()+'/Media4ShareUpdates/Latest/';
 
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
@@ -70,10 +73,11 @@ let sendAPIPostRequest;
 let sendAPIFormDataRequest;
 let getSharingPerm;
 let PageLoader;
+let TopNavLoader;
 let getUserNotifications;
 let setUserNotificationsRead;
 let sendNotification;
-let incrementFileDownloads;
+let downloadFinish;
 let randomRange;
 let getJoinedGroups;
 let getUserGroups;
@@ -85,6 +89,15 @@ let unshareFileWithList;
 let unshareFilesWithGroup;
 let LineChart;
 let getFileInfoFromUrl;
+let setContainerDisabled;
+let getLatestUpdateRelease;
+let saveLatestUpdateReleaseInfo;
+let loadLatestUpdateReleaseInfo;
+let saveJSONToFile;
+let getJSONFromFile;
+let forceMakeDirSync;
+let makeDirSync;
+let archiveFolder;
 
 // Overrided in Index.js
 let rebindEvents;
@@ -105,6 +118,84 @@ $('html').on('drop', e =>
 $(function()
 {
 
+// Archive folder
+archiveFolder = (folder_path) =>
+{
+	var url = API_END_POINT+'folders/archive';
+	var data = {
+		userId: getUserConfig().userId,
+		fullpath: folder_path
+	};
+	return sendAPIPostRequest(url, data);
+}
+// make dir
+makeDirSync = (dir) =>
+{
+	if ( !fs.existsSync(dir) )
+		fs.mkdirSync(dir, { recursive: true });
+}
+// Force make dir
+forceMakeDirSync = (dir) =>
+{
+	fs.mkdirSync(dir, { recursive: true });
+}
+// Get JSON from file
+getJSONFromFile = (filepath) =>
+{
+	var data = fs.readFileSync(filepath, 'utf-8');
+	json = JSON.parse(data);
+	return json;
+}
+// Save JSON to file
+saveJSONToFile = (json, filepath, CALLBACK) =>
+{
+	var data = JSON.stringify(json);
+	fs.writeFile(filepath, data, (error) => 
+	{
+		CALLBACK(error);
+	});
+}
+// Load latest update release info
+loadLatestUpdateReleaseInfo = () =>
+{
+	if ( fs.existsSync(LATEST_UPDATE_RELEASE_PATH+LATEST_UPDATE_RELEASE_FILE) )
+		return getJSONFromFile(LATEST_UPDATE_RELEASE_PATH+LATEST_UPDATE_RELEASE_FILE);
+	else
+		return null;
+}
+// Save latest update release info
+saveLatestUpdateReleaseInfo = (data) =>
+{
+	makeDirSync(LATEST_UPDATE_RELEASE_PATH);
+	saveJSONToFile(data, LATEST_UPDATE_RELEASE_PATH+LATEST_UPDATE_RELEASE_FILE, (err) => {});
+}
+// Get lastest update release
+getLatestUpdateRelease = () =>
+{
+	var url = `https://api.github.com/repos/${packageJson.build.publish.owner}/${packageJson.build.publish.repo}/releases/latest`;
+	var request = $.ajax({
+		url: url,
+		type: 'GET',
+	});
+
+	return request;
+}
+//
+setContainerDisabled = (disabled = false) =>
+{
+	if ( disabled )
+	{
+		MAIN_CONTENT_CONTAINER.addClass('disabled');
+		SIDE_NAV_CONTAINER.addClass('disabled');
+		TOP_NAV_CONTAINER.addClass('disabled');
+	}
+	else
+	{
+		MAIN_CONTENT_CONTAINER.removeClass('disabled');
+		SIDE_NAV_CONTAINER.removeClass('disabled');
+		TOP_NAV_CONTAINER.removeClass('disabled');
+	}
+}
 // Get file info from url
 getFileInfoFromUrl = (url) =>
 {
@@ -265,12 +356,22 @@ randomRange = (min, max) =>
 { 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
-// Increment file downloads
-incrementFileDownloads = (fileId) =>
+// Folder download finish
+folderDownloadFinish = (options) =>
 {
-	var url = API_END_POINT+'files/download';
+	var url = API_END_POINT+'folders/downloadFinish';
 	var data = {
-		fileId: fileId
+		fullpath: options.fullpath
+	};
+	return sendAPIPostRequest(url, data);
+}
+// File download finish
+fileDownloadFinish = (options) =>
+{
+	var url = API_END_POINT+'files/downloadFinish';
+	var data = {
+		fileId: options.fileId,
+		fullpath: options.fullpath
 	};
 	return sendAPIPostRequest(url, data);
 }
@@ -330,6 +431,22 @@ PageLoader = (visible = true, parent = MAIN_CONTENT_CONTAINER) =>
 		loadingScreen.addClass('active');
 	else
 		loadingScreen.removeClass('active');
+}
+// Top nav loader
+TopNavLoader = (text, visible = true) =>
+{
+	var loader = TOP_NAV_CONTAINER.find('#loader');
+
+	if ( visible )
+	{
+		loader.css('display', 'block')
+		.find('#text').text(' '+text);
+	}
+	else
+	{
+		loader.css('display', 'none')
+		.find('#text').text('');
+	}
 }
 // Get sharing permission
 getSharingPerm = (permId, CALLBACK) =>

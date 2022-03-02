@@ -17,8 +17,19 @@
 <%- include('src/views/dialogs/download-complete-dialog') -%>
 <%- include('src/views/dialogs/file-advanced-links-dialog') -%>
 <%- include('src/views/addons/sound-player') -%>
-<%- include('src/views/dialogs/update-app-dialog.ejs') -%>
+<%- include('src/views/dialogs/update-app-dialog') -%>
+<%- include('src/views/dialogs/latest-update-changes-dialog') -%>
+<div class="overlay active flex flex-center" id="loadingScreen" style="background-color: rgba(255, 255, 255, .7);">
+	<div>
+		<img src="src/assets/img/utils/loader2.gif" alt="">
+	</div>
+	<div class="my-3" style="padding: .5em 0 0 0; margin-right: .5em;">
+		<small class="text-muted" style="font-weight: 300;">Processing your request now, </small>
+		<span class="" style="font-weight: 200;font-size: 13px;">please wait...</span>
+	</div>
+</div>
 <div class="main-content-container position-relative" id="MainContentContainer">
+
 
 
 </div>
